@@ -58,7 +58,7 @@
         }
 
         #topbar-inner.open {
-            max-height: 220px;
+            max-height: 160px;
             padding: 8px 0;
         }
 
@@ -69,74 +69,6 @@
             text-transform: uppercase;
             color: #7c6dfa;
             white-space: nowrap;
-        }
-
-        /* Mode switcher tabs */
-        #mode-tabs {
-            display: flex;
-            background: #1e1e2e;
-            border: 1px solid #2e2e42;
-            border-radius: 8px;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        #mode-tabs button {
-            padding: 5px 14px;
-            font-size: 12px;
-            font-weight: 600;
-            border: none;
-            background: transparent;
-            color: #888;
-            cursor: pointer;
-            transition: background .15s, color .15s;
-            white-space: nowrap;
-        }
-
-        #mode-tabs button.active {
-            background: #7c6dfa;
-            color: #fff;
-        }
-
-        /* MAL controls */
-        #mal-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        /* Direct stream controls */
-        #direct-controls {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-wrap: wrap;
-            display: none;
-        }
-
-        #direct-controls.active {
-            display: flex;
-        }
-
-        #streamUrl {
-            width: 340px;
-            padding: 4px 10px;
-            background: #1e1e2e;
-            border: 1px solid #2e2e42;
-            border-radius: 6px;
-            color: #e2e2e8;
-            font-size: 13px;
-            outline: none;
-            transition: border-color .15s;
-        }
-
-        #streamUrl:focus {
-            border-color: #7c6dfa;
-        }
-
-        #streamUrl::placeholder {
-            color: #444;
         }
 
         .field-group {
@@ -296,15 +228,6 @@
         }
 
         #btn-go:hover {
-            background: #6a5be0;
-        }
-
-        #btn-play-direct {
-            background: #7c6dfa;
-            color: #fff;
-        }
-
-        #btn-play-direct:hover {
             background: #6a5be0;
         }
 
@@ -676,32 +599,6 @@
         #an-btn-cancel:hover {
             background: #2e2e42;
         }
-
-        /* Direct stream status badge */
-        #direct-status {
-            display: none;
-            align-items: center;
-            gap: 6px;
-            color: #a78bfa;
-            font-size: 12px;
-            font-weight: 600;
-            background: rgba(167, 139, 250, 0.12);
-            padding: 5px 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(167, 139, 250, 0.25);
-        }
-
-        #direct-status.error {
-            color: #f87171;
-            background: rgba(248, 113, 113, 0.1);
-            border-color: rgba(248, 113, 113, 0.25);
-        }
-
-        #direct-status.playing {
-            color: #4ade80;
-            background: rgba(74, 222, 128, 0.12);
-            border-color: rgba(74, 222, 128, 0.25);
-        }
     </style>
 </head>
 
@@ -711,74 +608,51 @@
             <div id="topbar-inner">
                 <span class="brand">&#9654; MegaPlay</span>
 
-                <!-- Mode switcher -->
-                <div id="mode-tabs">
-                    <button id="tab-mal" class="active" onclick="switchMode('mal')">MAL ID</button>
-                    <button id="tab-direct" onclick="switchMode('direct')">Direct Stream</button>
+                <div class="field-group">
+                    <label>MAL ID</label>
+                    <input id="inp-mal" type="number" placeholder="e.g. 1735" min="1">
+                </div>
+                <div class="field-group">
+                    <label>Episode</label>
+                    <input id="inp-ep" type="number" placeholder="e.g. 1" min="1">
                 </div>
 
-                <!-- MAL ID mode controls -->
-                <div id="mal-controls">
-                    <div class="field-group">
-                        <label>MAL ID</label>
-                        <input id="inp-mal" type="number" placeholder="e.g. 1735" min="1">
-                    </div>
-                    <div class="field-group">
-                        <label>Episode</label>
-                        <input id="inp-ep" type="number" placeholder="e.g. 1" min="1">
-                    </div>
-
-                    <div id="lang-toggle">
-                        <button id="btn-dub" class="active" onclick="setLang('dub')">DUB</button>
-                        <button id="btn-sub" onclick="setLang('sub')">SUB</button>
-                    </div>
-
-                    <div id="autonext-wrap">
-                        <span>Auto-Next</span>
-                        <label class="switch">
-                            <input type="checkbox" id="chk-autonext" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="ctrl-btns">
-                        <button class="bar-btn" id="btn-prev-bar" onclick="goPrevEp()">
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="15 18 9 12 15 6" />
-                            </svg>
-                            Prev
-                        </button>
-                        <button class="bar-btn" id="btn-go" onclick="loadPlayer()">&#9654; Play</button>
-                        <button class="bar-btn" id="btn-next-bar" onclick="goNextEp()">
-                            Next
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="9 18 15 12 9 6" />
-                            </svg>
-                        </button>
-                        <div id="extract-spinner" style="display:none; align-items:center; gap:6px; color:#a78bfa; font-size:12px; font-weight:600; background:rgba(167, 139, 250, 0.12); padding:5px 12px; border-radius:8px; border:1px solid rgba(167, 139, 250, 0.25);">
-                            <div class="spin"></div>
-                            <span>Extracting...</span>
-                        </div>
-                        <div id="prefetch-status" style="display:none; align-items:center; gap:5px; color:#4ade80; font-size:12px; font-weight:600; background:rgba(74, 222, 128, 0.12); padding:5px 12px; border-radius:8px; border:1px solid rgba(74, 222, 128, 0.25);">
-                            <span id="prefetch-icon">✓</span>
-                            <span id="prefetch-status-text">+50 Ep Ready</span>
-                        </div>
-                    </div>
+                <div id="lang-toggle">
+                    <button id="btn-dub" class="active" onclick="setLang('dub')">DUB</button>
+                    <button id="btn-sub" onclick="setLang('sub')">SUB</button>
                 </div>
 
-                <!-- Direct Stream mode controls -->
-                <div id="direct-controls">
-                    <input type="text" id="streamUrl" placeholder="https://example.com/live/index.m3u8" value="">
-                    <div class="ctrl-btns">
-                        <button class="bar-btn" id="btn-play-direct" onclick="playDirectStream()">
-                            &#9654; Play Stream
-                        </button>
-                        <div id="direct-status">
-                            <div class="spin" id="direct-spin"></div>
-                            <span id="direct-status-text">Loading...</span>
-                        </div>
+                <div id="autonext-wrap">
+                    <span>Auto-Next</span>
+                    <label class="switch">
+                        <input type="checkbox" id="chk-autonext" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="ctrl-btns">
+                    <button class="bar-btn" id="btn-prev-bar" onclick="goPrevEp()">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                        Prev
+                    </button>
+                    <button class="bar-btn" id="btn-go" onclick="loadPlayer()">&#9654; Play</button>
+                    <button class="bar-btn" id="btn-next-bar" onclick="goNextEp()">
+                        Next
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
+                    <div id="extract-spinner" style="display:none; align-items:center; gap:6px; color:#a78bfa; font-size:12px; font-weight:600; background:rgba(167, 139, 250, 0.12); padding:5px 12px; border-radius:8px; border:1px solid rgba(167, 139, 250, 0.25);">
+                        <div class="spin"></div>
+                        <span>Extracting...</span>
+                    </div>
+                    <div id="prefetch-status" style="display:none; align-items:center; gap:5px; color:#4ade80; font-size:12px; font-weight:600; background:rgba(74, 222, 128, 0.12); padding:5px 12px; border-radius:8px; border:1px solid rgba(74, 222, 128, 0.25);">
+                        <span id="prefetch-icon">✓</span>
+                        <span id="prefetch-status-text">+50 Ep Ready</span>
                     </div>
                 </div>
 
@@ -822,7 +696,7 @@
                     <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" />
                 </svg>
                 <p>Click &#8964; top-right to open controls</p>
-                <p class="hint" id="placeholder-hint">Enter MAL ID + Episode then press Play, or switch to Direct Stream</p>
+                <p class="hint">Enter MAL ID + Episode then press Play</p>
             </div>
 
             <video id="videoPlayer" controls autoplay style="display:none;"></video>
@@ -843,11 +717,6 @@
     </div>
 
     <script>
-        // ─── Constants ────────────────────────────────────────────────────────────
-        const HLS_WORKER_PROXY = 'https://hls-stream-player.ytbro8326.workers.dev/';
-        const COUNTDOWN_S = 10;
-
-        // ─── State ────────────────────────────────────────────────────────────────
         let hlsInstance = null;
         let currentLang = 'dub';
         let autoNextTimer = null;
@@ -856,164 +725,28 @@
         let cachedMalId = null;
         let cachedEp = null;
         let _fetchToken = 0;
-        let currentMode = 'mal'; // 'mal' | 'direct'
+        const COUNTDOWN_S = 10;
 
         const streamCache = new Map();
         let preFetchAbortToken = 0;
 
-        // ─── Mode Switcher ────────────────────────────────────────────────────────
-        function switchMode(mode) {
-            currentMode = mode;
-            document.getElementById('tab-mal').classList.toggle('active', mode === 'mal');
-            document.getElementById('tab-direct').classList.toggle('active', mode === 'direct');
-            document.getElementById('mal-controls').style.display = mode === 'mal' ? 'flex' : 'none';
-
-            const dc = document.getElementById('direct-controls');
-            dc.style.display = mode === 'direct' ? 'flex' : 'none';
-            dc.classList.toggle('active', mode === 'direct');
-
-            // Hide server panel when switching to direct mode
-            if (mode === 'direct') {
-                document.getElementById('srv-toggle-btn').classList.remove('show');
-                const panel = document.getElementById('server-panel');
-                panel.classList.remove('visible');
-                document.getElementById('srv-toggle-btn').classList.remove('open');
-            }
-        }
-
-        // ─── Proxy URL Builder ────────────────────────────────────────────────────
-        // Routes all HLS/m3u8/txt streams through the Cloudflare Worker proxy.
-        // The Worker at HLS_WORKER_PROXY accepts ?url=<encoded> and proxies the request.
-        function getWorkerProxyUrl(url) {
-            if (!url) return '';
-            // Already a worker proxy URL — pass through
-            if (url.startsWith(HLS_WORKER_PROXY)) return url;
-            return `${HLS_WORKER_PROXY}?url=${encodeURIComponent(url)}`;
-        }
-
-        // Legacy: used by MegaPlay extraction fallback chain
         function getProxyUrl(url) {
             if (!url) return '';
-            // Route through the Worker proxy for .m3u8 / .txt streams
-            const lower = url.split('?')[0].toLowerCase();
-            if (lower.endsWith('.m3u8') || lower.endsWith('.txt') || lower.includes('.m3u8')) {
-                return getWorkerProxyUrl(url);
+            if (url.startsWith('https://anivexa.onrender.com/proxy')) return url;
+            const cleanUrl = url.split('?')[0].toLowerCase();
+            if (cleanUrl.endsWith('.txt')) {
+                return `https://anivexa.onrender.com/proxy?url=${encodeURIComponent(url)}&referer=https://megaplay.buzz/`;
             }
             return url;
         }
 
-        // ─── Direct Stream Player ─────────────────────────────────────────────────
-        function playDirectStream() {
-            const rawUrl = document.getElementById('streamUrl').value.trim();
-            if (!rawUrl) {
-                alert('Please enter a stream URL.');
-                return;
-            }
-
-            // Show loading status
-            const statusEl = document.getElementById('direct-status');
-            const statusText = document.getElementById('direct-status-text');
-            const spinEl = document.getElementById('direct-spin');
-            statusEl.className = '';
-            statusEl.style.display = 'flex';
-            spinEl.style.display = 'block';
-            statusText.textContent = 'Loading...';
-
-            // Route through Worker proxy
-            const proxiedUrl = getWorkerProxyUrl(rawUrl);
-
-            const placeholder = document.getElementById('placeholder');
-            const video = document.getElementById('videoPlayer');
-            const iframe = document.getElementById('player-iframe');
-
-            placeholder.style.display = 'none';
-            iframe.style.display = 'none';
-            iframe.src = 'about:blank';
-            video.style.display = 'block';
-
-            if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-
-            const isHls = rawUrl.includes('.m3u8') || rawUrl.includes('.m3u') || rawUrl.includes('index.m3u');
-
-            if (isHls && Hls.isSupported()) {
-                hlsInstance = new Hls({
-                    xhrSetup: function(xhr, url) {
-                        // All segment requests also go through the worker
-                        // HLS.js resolves relative URLs; absolute ones pass through
-                    }
-                });
-
-                hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
-                    video.play().catch(() => { video.muted = true; video.play(); });
-                    statusEl.className = 'playing';
-                    spinEl.style.display = 'none';
-                    statusText.textContent = '● Live';
-                });
-
-                hlsInstance.on(Hls.Events.ERROR, (event, data) => {
-                    if (data.fatal) {
-                        statusEl.className = 'error';
-                        spinEl.style.display = 'none';
-                        statusText.textContent = 'Stream error — check URL';
-                    }
-                });
-
-                hlsInstance.loadSource(proxiedUrl);
-                hlsInstance.attachMedia(video);
-
-            } else if (isHls && video.canPlayType('application/vnd.apple.mpegurl')) {
-                // Native HLS (Safari)
-                video.src = proxiedUrl;
-                video.oncanplay = () => {
-                    statusEl.className = 'playing';
-                    spinEl.style.display = 'none';
-                    statusText.textContent = '● Live';
-                };
-                video.onerror = () => {
-                    statusEl.className = 'error';
-                    spinEl.style.display = 'none';
-                    statusText.textContent = 'Stream error — check URL';
-                };
-                video.play().catch(() => { video.muted = true; video.play(); });
-
-            } else {
-                // Non-HLS direct video (mp4, etc.) — proxy if same-origin needed
-                video.src = proxiedUrl;
-                video.oncanplay = () => {
-                    statusEl.className = 'playing';
-                    spinEl.style.display = 'none';
-                    statusText.textContent = '● Playing';
-                };
-                video.onerror = () => {
-                    statusEl.className = 'error';
-                    spinEl.style.display = 'none';
-                    statusText.textContent = 'Stream error — check URL';
-                };
-                video.play().catch(() => { video.muted = true; video.play(); });
-            }
-
-            document.title = `MegaPlay · Direct Stream`;
-        }
-
-        // Allow Enter key in stream URL input
-        document.addEventListener('DOMContentLoaded', () => {
-            const inp = document.getElementById('streamUrl');
-            if (inp) {
-                inp.addEventListener('keydown', e => {
-                    if (e.key === 'Enter') playDirectStream();
-                });
-            }
-        });
-
-        // ─── MegaPlay page fetcher (falls back through multiple proxies) ──────────
         async function fetchMegaPlayPage(url) {
             const proxyUrls = [];
             if (window.location.origin && window.location.protocol.startsWith('http') && !window.location.origin.includes('github.io')) {
                 proxyUrls.push(window.location.origin + `/proxy?url=${encodeURIComponent(url)}&referer=https://megaplay.buzz/`);
             }
-            // Worker proxy first, then fallbacks
             proxyUrls.push(
-                `${HLS_WORKER_PROXY}?url=${encodeURIComponent(url)}&referer=https://megaplay.buzz/`,
+                `https://anivexa.onrender.com/proxy?url=${encodeURIComponent(url)}&referer=https://megaplay.buzz/`,
                 `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
                 `https://corsproxy.io/?${encodeURIComponent(url)}`,
                 `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
@@ -1048,7 +781,7 @@
 
         async function parseMasterPlaylist(masterUrl) {
             try {
-                const proxiedMaster = getWorkerProxyUrl(masterUrl);
+                const proxiedMaster = getProxyUrl(masterUrl);
                 const res = await fetch(proxiedMaster);
                 if (!res.ok) return [];
                 const content = await res.text();
@@ -1061,6 +794,7 @@
                     const line = lines[i].trim();
                     if (line.startsWith("#EXT-X-STREAM-INF:")) {
                         const resMatch = line.match(/RESOLUTION=(\d+x\d+)/i);
+                        const bwMatch = line.match(/BANDWIDTH=(\d+)/i);
                         const resolution = resMatch ? resMatch[1] : "HD";
 
                         let qLabel = "HD";
@@ -1073,7 +807,11 @@
                             const streamPath = lines[i + 1].trim();
                             if (streamPath && !streamPath.startsWith("#")) {
                                 const absStream = streamPath.startsWith("http") ? streamPath : base + streamPath;
-                                variants.push({ quality: qLabel, resolution: resolution, url: absStream });
+                                variants.push({
+                                    quality: qLabel,
+                                    resolution: resolution,
+                                    url: absStream
+                                });
                             }
                         }
                     }
@@ -1216,7 +954,6 @@
             }
         }
 
-        // ─── UI Helpers ───────────────────────────────────────────────────────────
         function toggleBar() {
             const inner = document.getElementById('topbar-inner');
             const btn = document.getElementById('toggle-bar-btn');
@@ -1250,7 +987,6 @@
             }
         }
 
-        // ─── HLS Playback (MegaPlay streams) ─────────────────────────────────────
         function playStream(stream) {
             activeServerStream = stream;
             const placeholder = document.getElementById('placeholder');
@@ -1273,24 +1009,22 @@
             iframe.src = 'about:blank';
             video.style.display = 'block';
 
-            // Always route through the Worker proxy
-            const proxiedUrl = getWorkerProxyUrl(stream.url);
+            const proxiedUrl = getProxyUrl(stream.url);
 
             if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
 
-            const isHls = proxiedUrl.includes('.m3u8') || proxiedUrl.includes('.txt') ||
-                (stream.url && (stream.url.includes('.m3u8') || stream.url.includes('.txt')));
-
-            if (isHls && Hls.isSupported()) {
-                hlsInstance = new Hls();
-                hlsInstance.loadSource(proxiedUrl);
-                hlsInstance.attachMedia(video);
-                hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+            if (proxiedUrl.includes('.m3u8') || proxiedUrl.includes('.txt') || (stream.url && (stream.url.includes('.m3u8') || stream.url.includes('.txt')))) {
+                if (Hls.isSupported()) {
+                    hlsInstance = new Hls();
+                    hlsInstance.loadSource(proxiedUrl);
+                    hlsInstance.attachMedia(video);
+                    hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+                        video.play().catch(() => { video.muted = true; video.play(); });
+                    });
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = proxiedUrl;
                     video.play().catch(() => { video.muted = true; video.play(); });
-                });
-            } else if (isHls && video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = proxiedUrl;
-                video.play().catch(() => { video.muted = true; video.play(); });
+                }
             } else {
                 video.src = proxiedUrl;
                 video.play().catch(() => { video.muted = true; video.play(); });
@@ -1441,7 +1175,6 @@
             return streams[0];
         }
 
-        // ─── MAL Flow ─────────────────────────────────────────────────────────────
         async function showPlayer(malId, ep, lang = 'dub') {
             cancelAutoNext();
             currentLang = lang;
@@ -1480,6 +1213,7 @@
                     const best = getBestHdStream(streams, lang);
                     playStream(best);
                     renderServerPanel(streams);
+
                     preExtractNextEpisodes(malId, ep, 50);
                 } else {
                     document.getElementById('sp-error').style.display = 'block';
@@ -1565,13 +1299,6 @@
             }
 
             const searchParams = new URLSearchParams(search);
-
-            // Support ?stream=<url> for direct stream mode via URL param
-            const streamParam = searchParams.get('stream') || searchParams.get('url') || searchParams.get('src');
-            if (streamParam) {
-                return { directStream: streamParam };
-            }
-
             const qMal = searchParams.get('mal_id') || searchParams.get('malId') || searchParams.get('id');
             const qEp = searchParams.get('ep') || searchParams.get('ep_num') || searchParams.get('episode');
             const qLang = searchParams.get('lang') || searchParams.get('type');
@@ -1587,28 +1314,15 @@
             return null;
         }
 
-        // ─── Public API ───────────────────────────────────────────────────────────
         window.MegaPlayAPI = {
             getStreams: getMegaPlayStreams,
-            getProxyUrl: getWorkerProxyUrl,
-            playDirect: (url) => {
-                switchMode('direct');
-                document.getElementById('streamUrl').value = url;
-                playDirectStream();
-            }
+            getProxyUrl: getProxyUrl
         };
 
-        // ─── Init ─────────────────────────────────────────────────────────────────
         window.addEventListener('DOMContentLoaded', () => {
             const params = parseParamsFromUrl();
             if (params) {
-                if (params.directStream) {
-                    switchMode('direct');
-                    document.getElementById('streamUrl').value = params.directStream;
-                    playDirectStream();
-                } else if (params.malId) {
-                    showPlayer(params.malId, params.epNum, params.lang);
-                }
+                showPlayer(params.malId, params.epNum, params.lang);
             }
         });
     </script>
